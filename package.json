@@ -1,0 +1,38 @@
+{
+  "name": "tdd-course",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepush": "npm run test:coverage",
+    "test": "jest",
+    "test:tdd": "jest --watchAll",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "functions": 80,
+        "lines": 80
+      }
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babel-jest": "^25.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0"
+  }
+}
