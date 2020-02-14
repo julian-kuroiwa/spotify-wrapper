@@ -4,7 +4,7 @@ import {
   searchArtists,
   searchPlaylists,
   searchTracks
-} from '../src/main';
+} from '../src/search';
 
 describe('Spotify Wrapper', () => {
   let fetchSpy;
@@ -25,7 +25,7 @@ describe('Spotify Wrapper', () => {
     });
 
 
-  test('should exist the searchAllbums method', () => {
+    test('should exist the searchAllbums method', () => {
       expect(searchAlbums).toBeDefined();
     });
 

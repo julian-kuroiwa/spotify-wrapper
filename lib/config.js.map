@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/config.js"],"names":["API_URL"],"mappings":";;;;;;AAAO,MAAMA,OAAO,GAAG,4BAAhB","sourcesContent":["export const API_URL = 'https://api.spotify.com/v1';\n"],"file":"config.js"}
