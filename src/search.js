@@ -1,8 +1,9 @@
-import { API_URL } from './config';
+import { API_URL, HEADERS } from './config';
+import { toJSON } from './utils';
 
 export const search = (query, type) => {
-  return fetch(`${API_URL}/search?q=${query}&type=${type}`)
-  .then(response => response)
+  return fetch(`${API_URL}/search?q=${query}&type=${type}`, HEADERS)
+  .then(toJSON)
   .catch(errors => console.log(errors));
 }
 
