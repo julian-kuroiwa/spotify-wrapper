@@ -19,7 +19,10 @@
         "functions": 80,
         "lines": 80
       }
-    }
+    },
+    "setupFiles": [
+      "./setupJest.js"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -33,6 +36,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
     "husky": "^4.2.3",
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "jest-fetch-mock": "^3.0.1"
   }
 }
