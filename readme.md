@@ -1,5 +1,7 @@
 A wrapper to work with the [Spotify Web API](https://developer.spotify.com/web-api/).
 
+[![Build Status](https://travis-ci.org/julian-kuroiwa/spotify-wrapper.svg?branch=master)](https://travis-ci.org/julian-kuroiwa/spotify-wrapper)
+
 ## Getting Started
 ## Browser Support
 
