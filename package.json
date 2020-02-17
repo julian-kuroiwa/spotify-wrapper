@@ -14,7 +14,7 @@
     "build:all": "npm run build && npm run build:umd && npm run build:umd:min",
     "build:watch": "npm run clear && npm run build -- --watch --source-maps",
     "clear": "rimraf lib",
-    "coveralls": "npm run test:coverage --coverageReporters=text-lcov | coveralls"
+    "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "jest": {
     "coverageReporters": [
