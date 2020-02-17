@@ -4,7 +4,7 @@ const include = join(__dirname, 'src');
 
 export default {
   mode: 'development',
-  entry: './src/index.js',
+  entry: './index.js',
   output: {
     path: join(__dirname, 'dist'),
     libraryTarget: 'umd',

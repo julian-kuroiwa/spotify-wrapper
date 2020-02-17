@@ -1,5 +1,9 @@
-import {searchAlbums} from '../src/main';
+import SpotifyWrapper from '../src/index';
 
-const albums = searchAlbums('Incubus');
+const spotify = new SpotifyWrapper({
+  token: 'foo',
+});
+
+const albums = spotify.album.getAlbums('Incubus');
 
 albums.then(data => console.log(data));
