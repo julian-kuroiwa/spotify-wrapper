@@ -1,12 +1,12 @@
-import axios from 'axios';
-
-import { API_URL, HEADERS } from './config';
-
-export const search = async(query, type) => {
-  return await axios.get(`${API_URL}/search?q=${query}&type=${type}`, HEADERS)
+function searcher(type, query) {
+  return this.request(`${this.apiURL}/search?q=${query}&type=${type}`)
 }
 
-export const searchAlbums = query => search(query, 'album');
-export const searchArtists = query => search(query, 'artist');
-export const searchTracks = query => search(query, 'track');
-export const searchPlaylists = query => search(query, 'playlist');
+export default function search() {
+  return {
+    albums: searcher.bind(this, 'album'),
+    artists: searcher.bind(this, 'artist'),
+    tracks: searcher.bind(this, 'track'),
+    playlists: searcher.bind(this, 'playlist'),
+  }
+}

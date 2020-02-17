@@ -1,25 +1,25 @@
-import {
-  search,
-  searchAlbums,
-  searchArtists,
-  searchPlaylists,
-  searchTracks
-} from './search';
+import search from './search';
+import album from './album';
 
-import {
-  getAlbum,
-  getAlbumTracks,
-  getAlbums
-} from './album';
+import { API_URL } from './config';
+import axios from 'axios';
 
+export default class SpotifyWrapper {
+  constructor(option) {
+    this.apiURL = option.apiURL || API_URL;
+    this.token = option.token;
 
-export {
-  search,
-  searchAlbums,
-  searchArtists,
-  searchPlaylists,
-  searchTracks,
-  getAlbum,
-  getAlbumTracks,
-  getAlbums
+    this.album = album.bind(this)();
+    this.search = search.bind(this)();
+  }
+
+  request(url) {
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${this.token}`
+      }
+    }
+
+    return axios.get(url, headers);
+  }
 }

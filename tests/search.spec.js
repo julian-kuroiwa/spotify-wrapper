@@ -1,19 +1,23 @@
 import axios from 'axios';
 
-import {
-  search,
-  searchAlbums,
-  searchArtists,
-  searchPlaylists,
-  searchTracks
-} from '../src/search';
+import SpotifyWrapper from '../src/index';
 
 jest.mock('axios');
 
 describe('Spotify Wrapper', () => {
-  let data;
+  let data, spotify, headers;
 
   beforeEach(() => {
+    spotify = new SpotifyWrapper({
+      token: 'foo',
+    });
+
+    headers = {
+      headers: {
+        Authorization: `Bearer ${spotify.token}`
+      }
+    }
+
     data = {
       data: [
         {
@@ -37,102 +41,68 @@ describe('Spotify Wrapper', () => {
   });
 
   describe('smoke tests', () => {
-    test('should exist the search method', () => {
-      expect(search).toBeDefined();
+    test('should exist the spotify.search.albums method', () => {
+      expect(spotify.search.albums).toBeDefined();
     });
 
-
-    test('should exist the searchAllbums method', () => {
-      expect(searchAlbums).toBeDefined();
+    test('should exist the spotify.search.artists method', () => {
+      expect(spotify.search.artists).toBeDefined();
     });
 
-    test('should exist the searchArtists method', () => {
-      expect(searchArtists).toBeDefined();
+    test('should exist the spotify.search.tracks method', () => {
+      expect(spotify.search.tracks).toBeDefined();
     });
 
-    test('should exist the searchTracks method', () => {
-      expect(searchTracks).toBeDefined();
-    });
-
-    test('should exist the searchPlaylists method', () => {
-      expect(searchPlaylists).toBeDefined();
+    test('should exist the spotify.search.playlists method', () => {
+      expect(spotify.search.playlists).toBeDefined();
     });
   });
 
-  describe('Generic Search', () => {
+  describe('spotify.search.artists', () => {
     test('should call fetch function', async() => {
-      const artist = await search();
-      expect(axios.get).toBeCalledTimes(1);
-    });
-
-    describe('should receive correct url to fetch', () => {
-      test('passing one type', async() => {
-        const artists = await search('Incubus', 'artist');
-        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist', expect.anything());
-
-        const albums = await search('Incubus', 'album');
-        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=album', expect.anything());
-      });
-
-      test('passing more than one type', async() => {
-        const artistsAndAlbums = await search('Incubus', ['artist', 'album']);
-        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist,album', expect.anything());
-
-        const all = await search('Incubus', ['artist', 'album', 'playlist', 'track']);
-        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist,album,playlist,track', expect.anything());
-      });
-
-      test('should return the JSON Data from the Promise', async() => {
-        await expect(search('Incubus', 'artist')).resolves.toEqual(data);
-      });
-    });
-  });
-
-  describe('searchArtists', () => {
-    test('should call fetch function', async() => {
-      const artists =  await searchArtists();
+      const artists =  await spotify.search.artists();
       expect(axios.get).toBeCalledTimes(1);
     });
 
     test('should receive correct url to fetch', async() => {
-      const artist = await searchArtists('Incubus');
-      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist', expect.anything());
+      const artist = await spotify.search.artists('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist', headers);
     });
   });
 
-  describe('searchAlbums', () => {
+  describe('spotify.search.albums', () => {
     test('should call fetch function', async() => {
-      const albums = await searchAlbums();
+      const albums = await spotify.search.albums();
       expect(axios.get).toBeCalledTimes(1);
     });
 
     test('should receive correct url to fetch', async() => {
-      const albums = await searchAlbums('Incubus');
-      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=album', expect.anything());
+      const albums = await spotify.search.albums('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=album', headers);
     });
   });
 
-  describe('searchTracks', () => {
+  describe('spotify.search.tracks', () => {
     test('should call fetch function', async() => {
-      const tracks = await searchTracks();
+      const tracks = await spotify.search.tracks();
       expect(axios.get).toBeCalledTimes(1);
     });
 
     test('should receive correct url to fetch', async() => {
-      const tracks = await searchTracks('Incubus');
-      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=track', expect.anything());
+      const tracks = await spotify.search.tracks('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=track', headers);
     });
   });
 
-  describe('searchPlaylists', () => {
+  describe('spotify.search.playlists', () => {
     test('should call fetch function', async() => {
-      const playlists = await searchPlaylists();
+      const playlists = await spotify.search.playlists();
       expect(axios.get).toBeCalledTimes(1);
     });
 
     test('should receive correct url to fetch', async() => {
-      const playlists = await searchPlaylists('Incubus');
-      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=playlist', expect.anything());
+      const playlists = await spotify.search.playlists('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=playlist', headers);
     });
   });
 });

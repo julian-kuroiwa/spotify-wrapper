@@ -1,12 +1,16 @@
 import axios from 'axios';
-import {getAlbum, getAlbumTracks, getAlbums} from '../src/album';
+import SpotifyWrapper from '../src/index';
 
 jest.mock('axios');
 
 describe('Album', () => {
-  let data;
+  let data, spotify;
 
   beforeEach(() => {
+    spotify = new SpotifyWrapper({
+      token: 'foo',
+    });
+
     data = {
       data: [
         {
@@ -31,68 +35,68 @@ describe('Album', () => {
 
   describe('smoke tests', () => {
     test('should getAlbum be defined', () => {
-      expect(getAlbum).toBeDefined();
+      expect(spotify.album.getAlbum).toBeDefined();
     });
 
     test('should getAlbums be defined', () => {
-      expect(getAlbums).toBeDefined();
+      expect(spotify.album.getAlbums).toBeDefined();
     });
 
-    test('should getAlbumTracks be defined', () => {
-      expect(getAlbumTracks).toBeDefined();
+    test('should getTracks be defined', () => {
+      expect(spotify.album.getTracks).toBeDefined();
     });
   });
 
   describe('getAlbum', () => {
     test('should be called once', async() => {
-      const album = await getAlbum();
+      const album = await spotify.album.getAlbum();
       expect(axios.get).toBeCalledTimes(1);
     });
 
     test('should receive correct url to fetch', async() => {
-      const album = await getAlbum('4EnNuo8fG7dMoxMefbApRY');
+      const album = await spotify.album.getAlbum('4EnNuo8fG7dMoxMefbApRY');
       expect(axios.get).toBeCalledWith('https://api.spotify.com/v1/albums/4EnNuo8fG7dMoxMefbApRY', expect.anything())
 
-      const album2 = await getAlbum('4EnNuo8fG7dMoxMefbApRK');
+      const album2 = await spotify.album.getAlbum('4EnNuo8fG7dMoxMefbApRK');
       expect(axios.get).toBeCalledWith('https://api.spotify.com/v1/albums/4EnNuo8fG7dMoxMefbApRK', expect.anything())
     });
 
     test('should return the JSON Data from the Promise', async() => {
-      await expect(getAlbum('4EnNuo8fG7dMoxMefbApRY')).resolves.toEqual(data);
+      await expect(spotify.album.getAlbum('4EnNuo8fG7dMoxMefbApRY')).resolves.toEqual(data);
     });
   });
 
   describe('getAlbums', () => {
     test('should be called once', async() => {
-      const albums = await getAlbums();
+      const albums = await spotify.album.getAlbums();
       expect(axios.get).toBeCalledTimes(1);
     });
 
     test('should receive correct url to fetch', async() => {
-      const albums = await getAlbums(['4EnNuo8fG7dMoxMefbApRY', '4EnNuo8fG7dMoxMefbApRK']);
+      const albums = await spotify.album.getAlbums(['4EnNuo8fG7dMoxMefbApRY', '4EnNuo8fG7dMoxMefbApRK']);
       expect(axios.get).toBeCalledWith('https://api.spotify.com/v1/albums/?ids=4EnNuo8fG7dMoxMefbApRY,4EnNuo8fG7dMoxMefbApRK', expect.anything());
     });
 
 
     test('should return the JSON Data from the Promise', async() => {
-      await expect(getAlbums(['4EnNuo8fG7dMoxMefbApRY', '4EnNuo8fG7dMoxMefbApRK'])).resolves.toEqual(data);
+      await expect(spotify.album.getAlbums(['4EnNuo8fG7dMoxMefbApRY', '4EnNuo8fG7dMoxMefbApRK'])).resolves.toEqual(data);
     });
   });
 
-  describe('getAlbumTracks', () => {
+  describe('getTracks', () => {
     test('should be called once', async() => {
-      const tracks = await getAlbumTracks();
+      const tracks = await spotify.album.getTracks();
       expect(axios.get).toBeCalledTimes(1);
     });
 
     test('should receive correct url to fetch', async() => {
-      const tracks = await getAlbumTracks('4EnNuo8fG7dMoxMefbApRY');
+      const tracks = await spotify.album.getTracks('4EnNuo8fG7dMoxMefbApRY');
       expect(axios.get).toBeCalledWith('https://api.spotify.com/v1/albums/4EnNuo8fG7dMoxMefbApRY/tracks', expect.anything());
     });
 
 
     test('should return the JSON Data from the Promise', async() => {
-      await expect(getAlbumTracks('4EnNuo8fG7dMoxMefbApRY')).resolves.toEqual(data);
+      await expect(spotify.album.getTracks('4EnNuo8fG7dMoxMefbApRY')).resolves.toEqual(data);
     });
   });
 });
