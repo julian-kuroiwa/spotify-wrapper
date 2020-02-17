@@ -25,10 +25,7 @@
         "functions": 80,
         "lines": 80
       }
-    },
-    "setupFiles": [
-      "./setupJest.js"
-    ]
+    }
   },
   "keywords": [],
   "author": "",
@@ -45,8 +42,6 @@
     "eslint-plugin-import": "^2.20.1",
     "husky": "^4.2.3",
     "jest": "^25.1.0",
-    "jest-fetch-mock": "^3.0.1",
-    "node-fetch": "^2.6.0",
     "rimraf": "^3.0.2",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11"

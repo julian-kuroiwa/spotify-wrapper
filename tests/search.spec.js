@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import {
   search,
   searchAlbums,
@@ -6,17 +8,32 @@ import {
   searchTracks
 } from '../src/search';
 
+jest.mock('axios');
+
 describe('Spotify Wrapper', () => {
-  let fetchSpy;
-  let promise;
+  let data;
 
   beforeEach(() => {
-    fetchSpy = jest.spyOn(global, 'fetch');
-    promise = fetchSpy.mockImplementation(() => Promise.resolve());
+    data = {
+      data: [
+        {
+          userId: 1,
+          id: 1,
+          title: 'My First Album'
+        },
+        {
+          userId: 1,
+          id: 2,
+          title: 'Album: The Sequel'
+        }
+      ]
+    }
+
+    axios.get.mockResolvedValue(data);
   });
 
   afterEach(() => {
-    fetchSpy.mockRestore();
+    axios.get.mockRestore();
   });
 
   describe('smoke tests', () => {
@@ -43,83 +60,79 @@ describe('Spotify Wrapper', () => {
   });
 
   describe('Generic Search', () => {
-    test('should call fetch function', () => {
-      const artists = search();
-      expect(fetchSpy).toBeCalledTimes(1);
+    test('should call fetch function', async() => {
+      const artist = await search();
+      expect(axios.get).toBeCalledTimes(1);
     });
 
     describe('should receive correct url to fetch', () => {
-      test('passing one type', () => {
-        const artists = search('Incubus', 'artist');
-        expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist', expect.anything());
+      test('passing one type', async() => {
+        const artists = await search('Incubus', 'artist');
+        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist', expect.anything());
 
-        const albums = search('Incubus', 'album');
-        expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=album', expect.anything());
+        const albums = await search('Incubus', 'album');
+        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=album', expect.anything());
       });
 
-      test('passing more than one type', () => {
-        const artistsAndAlbums = search('Incubus', ['artist', 'album']);
-        expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist,album', expect.anything());
+      test('passing more than one type', async() => {
+        const artistsAndAlbums = await search('Incubus', ['artist', 'album']);
+        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist,album', expect.anything());
 
-        const all = search('Incubus', ['artist', 'album', 'playlist', 'track']);
-        expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist,album,playlist,track', expect.anything());
+        const all = await search('Incubus', ['artist', 'album', 'playlist', 'track']);
+        expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist,album,playlist,track', expect.anything());
       });
 
-      test('should return the JSON Data from the Promise', () => {
-        promise.mockResolvedValue({body: 'json'});
-        const artists = search('Incubus', 'artist');
-
-        expect(artists).resolves.toEqual({body: 'json'});
-      })
+      test('should return the JSON Data from the Promise', async() => {
+        await expect(search('Incubus', 'artist')).resolves.toEqual(data);
+      });
     });
   });
 
   describe('searchArtists', () => {
     test('should call fetch function', async() => {
-      const artists =  searchArtists();
-
-      expect(await fetchSpy).toBeCalledTimes(1);
+      const artists =  await searchArtists();
+      expect(axios.get).toBeCalledTimes(1);
     });
 
-    test('should receive correct url to fetch', () => {
-      const artist = searchArtists('Incubus');
-      expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist', expect.anything());
+    test('should receive correct url to fetch', async() => {
+      const artist = await searchArtists('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist', expect.anything());
     });
   });
 
   describe('searchAlbums', () => {
-    test('should call fetch function', () => {
-      const albums = searchAlbums();
-      expect(fetchSpy).toBeCalledTimes(1);
+    test('should call fetch function', async() => {
+      const albums = await searchAlbums();
+      expect(axios.get).toBeCalledTimes(1);
     });
 
-    test('should receive correct url to fetch', () => {
-      const albums = searchAlbums('Incubus');
-      expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=album', expect.anything());
+    test('should receive correct url to fetch', async() => {
+      const albums = await searchAlbums('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=album', expect.anything());
     });
   });
 
   describe('searchTracks', () => {
-    test('should call fetch function', () => {
-      const tracks = searchTracks();
-      expect(fetchSpy).toBeCalledTimes(1);
+    test('should call fetch function', async() => {
+      const tracks = await searchTracks();
+      expect(axios.get).toBeCalledTimes(1);
     });
 
-    test('should receive correct url to fetch', () => {
-      const tracks = searchTracks('Incubus');
-      expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=track', expect.anything());
+    test('should receive correct url to fetch', async() => {
+      const tracks = await searchTracks('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=track', expect.anything());
     });
   });
 
   describe('searchPlaylists', () => {
-    test('should call fetch function', () => {
-      const playlists = searchPlaylists();
-      expect(fetchSpy).toBeCalledTimes(1);
+    test('should call fetch function', async() => {
+      const playlists = await searchPlaylists();
+      expect(axios.get).toBeCalledTimes(1);
     });
 
-    test('should receive correct url to fetch', () => {
-      const playlists = searchPlaylists('Incubus');
-      expect(fetchSpy).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=playlist', expect.anything());
+    test('should receive correct url to fetch', async() => {
+      const playlists = await searchPlaylists('Incubus');
+      expect(axios.get).toHaveBeenCalledWith('https://api.spotify.com/v1/search?q=Incubus&type=playlist', expect.anything());
     });
   });
 });

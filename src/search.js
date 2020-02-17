@@ -1,10 +1,9 @@
-import { API_URL, HEADERS } from './config';
-import { toJSON } from './utils';
+import axios from 'axios';
 
-export const search = (query, type) => {
-  return fetch(`${API_URL}/search?q=${query}&type=${type}`, HEADERS)
-  .then(toJSON)
-  .catch(errors => console.log(errors));
+import { API_URL, HEADERS } from './config';
+
+export const search = async(query, type) => {
+  return await axios.get(`${API_URL}/search?q=${query}&type=${type}`, HEADERS)
 }
 
 export const searchAlbums = query => search(query, 'album');
